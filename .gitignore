@@ -1,0 +1,39 @@
+# Create .gitignore file
+@"
+# Python
+__pycache__/
+*.py[cod]
+venv/
+env/
+*.egg-info/
+.Python
+
+# Node
+node_modules/
+npm-debug.log*
+package-lock.json
+dist/
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database
+*.db
+*.sqlite
+
+# Large files
+backend/data/vectorstore/
+
+# Logs
+*.log
+"@ | Out-File -FilePath .gitignore -Encoding utf8

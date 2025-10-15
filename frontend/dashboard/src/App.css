@@ -1,0 +1,142 @@
+/* General layout */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #ffffff;
+  color: #222;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 260px;
+  background-color: #121212;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+}
+
+.logo-container {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.logo {
+  width: 75px;
+  height: 75px;
+}
+
+.logo-text {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #f9c74f;
+  margin-top: 0.4rem;
+}
+
+.logo-subtitle {
+  font-size: 0.7rem;
+  color: #bdbdbd;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Navigation */
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.5rem;
+}
+
+.nav-btn {
+  background: none;
+  color: #bdbdbd;
+  border: none;
+  text-align: left;
+  padding: 0.8rem 1.2rem;
+  font-size: 1rem;
+  transition: 0.3s;
+  cursor: pointer;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+}
+
+.nav-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #f9c74f;
+}
+
+.nav-btn.active {
+  background-color: #f9c74f;
+  color: #000;
+  font-weight: 600;
+}
+
+/* Main content */
+.main-content {
+  flex-grow: 1;
+  padding: 3rem;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-header {
+  background-color: #f8f8f8;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  margin-bottom: 2rem;
+  border: 1px solid #e5e5e5;
+}
+
+.main-header h1 {
+  color: #111;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.main-header p {
+  color: #555;
+  font-size: 1rem;
+}
+
+/* Content box */
+.content-box {
+  background-color: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Analytics Input */
+.api-input-box {
+  margin-bottom: 1.5rem;
+}
+
+.api-input-box label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.api-input-box input {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.7rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fafafa;
+  color: #111;
+  outline: none;
+  transition: 0.2s;
+}
+
+.api-input-box input:focus {
+  border-color: #f9c74f;
+  background-color: #fff;
+}

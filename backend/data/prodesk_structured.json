@@ -1,0 +1,35 @@
+{
+  "company": {
+    "name": "Prodesk Engineering Manpower",
+    "founded": "2012",
+    "employees": "156",
+    "locations": "5 global locations",
+    "headquarters": "91springboard, Plot No. D-107, Sector 2, Noida, UP 201301"
+  },
+  "leadership": {
+    "founder": "Dr. Amit Maheshwari",
+    "background": "Ex-Tech Mahindra, HR Manager"
+  },
+  "services": [
+    "Software Development",
+    "IT Consulting",
+    "Cybersecurity",
+    "Cloud Solutions",
+    "Data Analytics",
+    "Mobile Application Development",
+    "Website Development",
+    "Logo Design"
+  ],
+  "industries": [
+    "Manufacturing",
+    "Telecom",
+    "Pharmaceuticals",
+    "Engineering"
+  ],
+  "technologies": [
+    "Web Applications",
+    "Mobile Apps",
+    "Enterprise Software",
+    "Cloud Infrastructure"
+  ]
+}
