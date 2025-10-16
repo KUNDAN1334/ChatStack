@@ -1,4 +1,4 @@
-# 🤖 Prodesk AI Chatbot Platform
+# 🤖 ChatStack
 
 AI-Powered Multi-Tenant SaaS Customer Support Chatbot for Prodesk Engineering Manpower.
 
