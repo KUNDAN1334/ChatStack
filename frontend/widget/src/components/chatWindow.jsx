@@ -77,9 +77,6 @@ export default function ChatWindow({
           <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '600' }}>
             Prodesk Assistant
           </h3>
-          <p style={{ margin: '4px 0 0 0', fontSize: '12px', opacity: 0.9 }}>
-            Powered by AI • Online
-          </p>
         </div>
         
         <button

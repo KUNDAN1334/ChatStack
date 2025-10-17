@@ -2,224 +2,487 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Prodesk Chatbot Widget - Development</title>
+    <title>Prodesk AI Assistant - Intelligent Customer Support</title>
     <style>
-      body {
+      * {
         margin: 0;
         padding: 0;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
+        box-sizing: border-box;
       }
-      
-      .dev-container {
+
+      body {
+        font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+        background: #000000;
+        color: #ffffff;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      /* Header */
+      .header {
+        background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+        padding: 20px 0;
+        box-shadow: 0 4px 20px rgba(218, 165, 32, 0.1);
+        border-bottom: 1px solid rgba(218, 165, 32, 0.2);
+      }
+
+      .header-content {
         max-width: 1200px;
         margin: 0 auto;
-        padding: 60px 20px;
-        color: white;
+        padding: 0 30px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
       }
-      
-      .card {
-        background: white;
-        color: #333;
-        padding: 40px;
-        border-radius: 12px;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-        margin-bottom: 30px;
+
+      .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 15px;
       }
-      
-      .badge {
-        display: inline-block;
-        background: #667eea;
-        color: white;
-        padding: 5px 15px;
-        border-radius: 20px;
-        font-size: 14px;
-        font-weight: 600;
+
+      .logo {
+        width: 60px;
+        height: 60px;
+        object-fit: contain;
+      }
+
+      .brand {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .brand-name {
+        font-size: 28px;
+        font-weight: 700;
+        background: linear-gradient(135deg, #DAA520 0%, #FFD700 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: 1px;
+      }
+
+      .brand-tagline {
+        font-size: 11px;
+        color: #DAA520;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-weight: 500;
+      }
+
+      /* Hero Section */
+      .hero {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 80px 30px;
+        text-align: center;
+      }
+
+      .hero-title {
+        font-size: 56px;
+        font-weight: 800;
         margin-bottom: 20px;
+        background: linear-gradient(135deg, #ffffff 0%, #DAA520 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1.2;
       }
-      
-      h1 {
-        margin: 0 0 20px 0;
-        color: #667eea;
-        font-size: 36px;
+
+      .hero-subtitle {
+        font-size: 20px;
+        color: #b8b8b8;
+        margin-bottom: 40px;
+        line-height: 1.6;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
       }
-      
-      .instructions {
-        background: #f8f9fa;
-        border-left: 4px solid #667eea;
-        padding: 20px;
-        margin: 20px 0;
-      }
-      
-      .instructions h3 {
-        margin-top: 0;
-        color: #667eea;
-      }
-      
-      .code-block {
-        background: #1e1e1e;
-        color: #d4d4d4;
-        padding: 20px;
-        border-radius: 8px;
-        overflow-x: auto;
-        font-family: 'Courier New', monospace;
-        font-size: 13px;
-        margin: 15px 0;
-      }
-      
-      .status {
-        padding: 15px;
-        border-radius: 8px;
-        margin: 15px 0;
-      }
-      
-      .status.success {
-        background: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
-      }
-      
-      .chatbot-indicator {
-        position: fixed;
-        bottom: 30px;
-        left: 30px;
-        background: white;
-        padding: 15px 25px;
-        border-radius: 10px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(218, 165, 32, 0.15);
+        border: 1px solid #DAA520;
+        padding: 12px 24px;
+        border-radius: 50px;
+        color: #DAA520;
         font-weight: 600;
-        color: #667eea;
-        animation: pulse 2s infinite;
+        margin-bottom: 50px;
+        animation: pulse 2s ease-in-out infinite;
       }
-      
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        background: #DAA520;
+        border-radius: 50%;
+        animation: blink 1.5s ease-in-out infinite;
+      }
+
+      /* Features Grid */
+      .features {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 60px 30px;
+      }
+
+      .section-title {
+        text-align: center;
+        font-size: 42px;
+        font-weight: 700;
+        margin-bottom: 50px;
+        color: #ffffff;
+      }
+
+      .section-title span {
+        color: #DAA520;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-bottom: 60px;
+      }
+
+      .feature-card {
+        background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+        border: 1px solid rgba(218, 165, 32, 0.2);
+        border-radius: 16px;
+        padding: 35px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, #DAA520 0%, #FFD700 100%);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+        border-color: #DAA520;
+        box-shadow: 0 10px 40px rgba(218, 165, 32, 0.2);
+      }
+
+      .feature-card:hover::before {
+        transform: scaleX(1);
+      }
+
+      .feature-icon {
+        font-size: 48px;
+        margin-bottom: 20px;
+        display: block;
+      }
+
+      .feature-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #DAA520;
+        margin-bottom: 12px;
+      }
+
+      .feature-description {
+        color: #b8b8b8;
+        line-height: 1.6;
+        font-size: 15px;
+      }
+
+      /* CTA Section */
+      .cta-section {
+        max-width: 900px;
+        margin: 80px auto;
+        padding: 0 30px;
+        text-align: center;
+      }
+
+      .cta-box {
+        background: linear-gradient(135deg, rgba(218, 165, 32, 0.1) 0%, rgba(0, 0, 0, 0.5) 100%);
+        border: 2px solid #DAA520;
+        border-radius: 20px;
+        padding: 50px;
+      }
+
+      .cta-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 15px;
+      }
+
+      .cta-description {
+        color: #b8b8b8;
+        margin-bottom: 30px;
+        font-size: 16px;
+      }
+
+      .chatbot-indicator-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 15px;
+        background: linear-gradient(135deg, #DAA520 0%, #FFD700 100%);
+        color: #000000;
+        padding: 18px 40px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 18px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 20px rgba(218, 165, 32, 0.3);
+        cursor: pointer;
+        border: none;
+      }
+
+      .chatbot-indicator-cta:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(218, 165, 32, 0.5);
+      }
+
+      /* Footer */
+      .footer {
+        background: #0d0d0d;
+        padding: 40px 30px;
+        text-align: center;
+        border-top: 1px solid rgba(218, 165, 32, 0.2);
+        margin-top: 100px;
+      }
+
+      .footer-text {
+        color: #b8b8b8;
+        font-size: 14px;
+      }
+
+      .footer-text a {
+        color: #DAA520;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .footer-text a:hover {
+        text-decoration: underline;
+      }
+
+      /* Animations */
       @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.05); }
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+      }
+
+      @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .animate-fade {
+        animation: fadeInUp 0.8s ease-out forwards;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .hero-title {
+          font-size: 36px;
+        }
+        .hero-subtitle {
+          font-size: 16px;
+        }
+        .section-title {
+          font-size: 32px;
+        }
+        .features-grid {
+          grid-template-columns: 1fr;
+        }
+        .cta-box {
+          padding: 30px 20px;
+        }
+        .brand-name {
+          font-size: 22px;
+        }
+        .logo {
+          width: 45px;
+          height: 45px;
+        }
       }
     </style>
   </head>
   <body>
-    <div class="dev-container">
-      <div class="card">
-        <span class="badge">🚀 DEVELOPMENT MODE</span>
-        <h1>Prodesk Chatbot Widget</h1>
-        <p style="font-size: 18px; color: #666; margin-bottom: 30px;">
-          AI-powered customer support chatbot for your website
-        </p>
-        
-        <div class="status success">
-          ✅ <strong>Widget is running!</strong> Check the bottom-right corner for the chatbot button.
-        </div>
-
-        <div class="instructions">
-          <h3>📋 How to Use This Widget:</h3>
-          <ol style="line-height: 1.8;">
-            <li>Click the chatbot button in the <strong>bottom-right corner</strong></li>
-            <li>Start chatting with the AI assistant</li>
-            <li>Ask questions about Prodesk services</li>
-            <li>Test the lead capture form (appears after 3 messages)</li>
-          </ol>
-        </div>
-
-        <div class="instructions">
-          <h3>💡 Sample Questions to Ask:</h3>
-          <ul style="line-height: 1.8;">
-            <li>"What services does Prodesk offer?"</li>
-            <li>"How many employees work at Prodesk?"</li>
-            <li>"Where is Prodesk located?"</li>
-            <li>"Tell me about your team"</li>
-            <li>"What technologies do you use?"</li>
-          </ul>
-        </div>
-
-        <div class="instructions">
-          <h3>🔧 Integration Code:</h3>
-          <p>To embed this chatbot on your website, add this code before closing <code>&lt;/body&gt;</code> tag:</p>
-          
-          <div class="code-block">
-&lt;!-- Prodesk Chatbot Widget --&gt;
-&lt;script src="http://localhost:5174/dist/widget.iife.js"&gt;&lt;/script&gt;
-&lt;script&gt;
-  window.PRODESK_API_URL = 'http://localhost:8000';
-  window.ProdeskChatbot.init({
-    apiKey: 'pk_gBgx7_PM14e48UNFGCTXDC9_1etkpllFOge3QTxNOFU',
-    theme: {
-      primaryColor: '#0066cc',
-      position: 'bottom-right',
-      welcomeMessage: 'Hello! How can I help you?'
-    }
-  });
-&lt;/script&gt;
-          </div>
-        </div>
-
-        <div class="instructions">
-          <h3>⚙️ Configuration Options:</h3>
-          <ul style="line-height: 1.8;">
-            <li><strong>apiKey:</strong> Your unique API key from dashboard</li>
-            <li><strong>primaryColor:</strong> Brand color (hex code)</li>
-            <li><strong>position:</strong> 'bottom-right' or 'bottom-left'</li>
-            <li><strong>welcomeMessage:</strong> First message shown to user</li>
-          </ul>
-        </div>
-
-        <div class="instructions">
-          <h3>🛠️ Development Servers:</h3>
-          <ul style="line-height: 1.8;">
-            <li>✅ Widget Dev: <code>http://localhost:5174</code></li>
-            <li>✅ Backend API: <code>http://localhost:8000</code></li>
-            <li>✅ Dashboard: <code>http://localhost:5173</code></li>
-          </ul>
-        </div>
-
-        <div class="instructions">
-          <h3>🔑 Your API Key:</h3>
-          <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; border-left: 4px solid #2196f3;">
-            ode style="font-size: 14pxpx; color: #1976d2;">pk_gBgx7_PM14e48UNFGCTXDC9_1etkpllFOge3QTxNOFU</code>
-            <p style="margin: 10px 0 0 0; font-size: 13px; color: #555;">
-              ✅ This API key is already configured in the widget below
-            </p>
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <div class="logo-container">
+          <!-- Use your actual logo -->
+          <img src="/logo.png" alt="Prodesk Logo" class="logo">
+          <div class="brand">
+            <div class="brand-name">PRODESK</div>
+            <div class="brand-tagline">IT & Engineering Services</div>
           </div>
         </div>
       </div>
-    </div>
+    </header>
 
-    <div class="chatbot-indicator">
-      👉 Chatbot Widget Active →
-    </div>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        AI Assistant Online
+      </div>
+
+      <h1 class="hero-title animate-fade">
+        Prodesk AI Assistant
+      </h1>
+
+      <p class="hero-subtitle animate-fade" style="animation-delay: 0.2s;">
+        Experience the future of customer support with our intelligent AI chatbot. 
+        Powered by advanced RAG technology and Groq Llama 3.1, delivering instant, 
+        accurate responses 24/7.
+      </p>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+      <h2 class="section-title">
+        Powerful <span>Features</span>
+      </h2>
+
+      <div class="features-grid">
+        <div class="feature-card animate-fade" style="animation-delay: 0.1s;">
+          <span class="feature-icon">🤖</span>
+          <h3 class="feature-title">AI-Powered Intelligence</h3>
+          <p class="feature-description">
+            Advanced RAG technology with Groq Llama 3.1 for lightning-fast, 
+            contextually accurate responses based on Prodesk's knowledge base.
+          </p>
+        </div>
+
+        <div class="feature-card animate-fade" style="animation-delay: 0.2s;">
+          <span class="feature-icon">⚡</span>
+          <h3 class="feature-title">Ultra-Fast Responses</h3>
+          <p class="feature-description">
+            Get answers in under 3 seconds. Our optimized infrastructure ensures 
+            instant support without any waiting time.
+          </p>
+        </div>
+
+        <div class="feature-card animate-fade" style="animation-delay: 0.3s;">
+          <span class="feature-icon">📊</span>
+          <h3 class="feature-title">Smart Lead Capture</h3>
+          <p class="feature-description">
+            Automatically identifies engaged visitors and captures leads with 
+            intelligent timing, converting conversations into opportunities.
+          </p>
+        </div>
+
+        <div class="feature-card animate-fade" style="animation-delay: 0.4s;">
+          <span class="feature-icon">🌐</span>
+          <h3 class="feature-title">24/7 Availability</h3>
+          <p class="feature-description">
+            Never miss a customer query. Our AI assistant is always online, 
+            providing instant support around the clock.
+          </p>
+        </div>
+
+        <div class="feature-card animate-fade" style="animation-delay: 0.5s;">
+          <span class="feature-icon">🔒</span>
+          <h3 class="feature-title">Secure & Private</h3>
+          <p class="feature-description">
+            Enterprise-grade security with API key authentication and encrypted 
+            data storage. Your conversations are completely private.
+          </p>
+        </div>
+
+        <div class="feature-card animate-fade" style="animation-delay: 0.6s;">
+          <span class="feature-icon">📈</span>
+          <h3 class="feature-title">Real-Time Analytics</h3>
+          <p class="feature-description">
+            Track performance metrics, customer engagement, and conversation 
+            insights with comprehensive analytics dashboard.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="cta-box">
+        <h2 class="cta-title">Ready to Experience AI Excellence?</h2>
+        <p class="cta-description">
+          Click the chatbot button in the bottom-right corner to start your conversation. 
+          Ask anything about Prodesk's services, team, or technology.
+        </p>
+        <button class="chatbot-indicator-cta" onclick="scrollToBottom()">
+          <span>💬</span>
+          <span>Try the AI Assistant Now</span>
+          <span>→</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p class="footer-text">
+        Developed by <a href="https://github.com/KUNDAN1334" target="_blank">Kundan Solanki</a> 
+        for <strong style="color: #DAA520;">Prodesk IT</strong>
+      </p>
+      <p class="footer-text" style="margin-top: 10px; font-size: 12px;">
+        Powered by FastAPI • React • MongoDB • Groq AI
+      </p>
+    </footer>
 
     <!-- Widget Entry Point -->
     <script type="module" src="/src/widget.jsx"></script>
     
-    <!-- Auto-initialize widget in dev mode -->
+    <!-- Auto-initialize widget -->
     <script type="module">
-      // Wait for widget to load
+      // Scroll to bottom helper
+      window.scrollToBottom = function() {
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: 'smooth'
+        });
+      };
+
+      // Initialize chatbot
       window.addEventListener('load', () => {
         setTimeout(() => {
           if (window.ProdeskChatbot) {
-            // Set API URL
             window.PRODESK_API_URL = 'http://localhost:8000';
             
-            // Initialize widget with YOUR REAL API KEY
             window.ProdeskChatbot.init({
               apiKey: 'pk_gBgx7_PM14e48UNFGCTXDC9_1etkpllFOge3QTxNOFU',
               theme: {
-                primaryColor: '#667eea',
+                primaryColor: '#DAA520',
                 position: 'bottom-right',
-                welcomeMessage: 'Hello! I\'m your AI assistant. How can I help you today? 😊'
+                welcomeMessage: 'Hello! I\'m Prodesk AI Assistant. How can I help you today? 😊'
               }
             });
             
-            console.log('✅ Prodesk Chatbot initialized successfully!');
-            console.log('🔑 Using API Key: pk_gBgx7_PM14e48UNFGCTXDC9_1etkpllFOge3QTxNOFU');
-            console.log('🌐 Backend URL: http://localhost:8000');
-            console.log('💬 Ready to chat!');
+            console.log('✅ Prodesk AI Assistant initialized');
+            console.log('🎨 Theme: Black, White & Gold');
+            console.log('💬 Ready to assist!');
           } else {
-            console.error('❌ ProdeskChatbot not found on window object');
-            console.error('⚠️  Make sure widget.jsx is loaded correctly');
+            console.error('❌ ProdeskChatbot widget not loaded');
+            console.log('⚠️  Make sure widget.jsx is properly configured');
           }
         }, 1000);
       });
