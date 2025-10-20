@@ -1,154 +1,102 @@
-from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.chains import ConversationalRetrievalChain
-from langchain.memory import ConversationBufferMemory
-from langchain_groq import ChatGroq
-from typing import Dict, List, Optional
+"""
+Lightweight RAG without heavy ML libraries
+Uses Groq API for everything
+"""
 import json
-import os
 import logging
-from ..config import settings
+from pathlib import Path
+import httpx
 
 logger = logging.getLogger(__name__)
 
 class RAGService:
-    """Retrieval-Augmented Generation service"""
-    
     def __init__(self):
-        self.embeddings = HuggingFaceEmbeddings(
-            model_name="sentence-transformers/all-MiniLM-L6-v2"
-        )
-        self.vectorstore = None
-        self.llm = ChatGroq(
-            model="llama-3.1-8b-instant",
-            temperature=0.5,
-            groq_api_key=settings.groq_api_key
-        )
-        self.sessions: Dict[str, ConversationBufferMemory] = {}
-        
-        # Load or create vectorstore
-        self._initialize_vectorstore()
+        self.knowledge_file = Path(__file__).parent.parent.parent / "data" / "prodesk_knowledge.json"
+        self.knowledge_base = self.load_knowledge()
+        self.groq_api_key = None
     
-    def _initialize_vectorstore(self):
-        """Load existing vectorstore or create new one"""
-        vectorstore_path = settings.vectorstore_path
-        
-        if os.path.exists(vectorstore_path):
-            logger.info("Loading existing vectorstore...")
-            try:
-                self.vectorstore = FAISS.load_local(
-                    vectorstore_path,
-                    self.embeddings,
-                    allow_dangerous_deserialization=True
-                )
-                logger.info("Vectorstore loaded successfully")
-            except Exception as e:
-                logger.error(f"Error loading vectorstore: {e}")
-                self._create_vectorstore()
-        else:
-            self._create_vectorstore()
-    
-    def _create_vectorstore(self):
-        """Create new vectorstore from knowledge file"""
-        logger.info("Creating new vectorstore...")
-        
-        knowledge_file = settings.knowledge_file
-        
-        if not os.path.exists(knowledge_file):
-            logger.error(f"Knowledge file not found: {knowledge_file}")
-            return
-        
-        # Load knowledge
-        with open(knowledge_file, 'r', encoding='utf-8') as f:
-            docs = json.load(f)
-        
-        # Split into chunks
-        text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=500,
-            chunk_overlap=50,
-            length_function=len,
-        )
-        
-        texts = []
-        metadatas = []
-        
-        for doc in docs:
-            chunks = text_splitter.split_text(doc['content'])
-            texts.extend(chunks)
-            metadatas.extend([{"source": doc['source']} for _ in chunks])
-        
-        # Create vectorstore
-        self.vectorstore = FAISS.from_texts(
-            texts,
-            self.embeddings,
-            metadatas=metadatas
-        )
-        
-        # Save vectorstore
-        os.makedirs(settings.vectorstore_path, exist_ok=True)
-        self.vectorstore.save_local(settings.vectorstore_path)
-        
-        logger.info(f"Vectorstore created with {len(texts)} chunks")
-    
-    def get_or_create_memory(self, session_id: str) -> ConversationBufferMemory:
-        """Get or create conversation memory for session"""
-        if session_id not in self.sessions:
-            self.sessions[session_id] = ConversationBufferMemory(
-                memory_key="chat_history",
-                return_messages=True,
-                output_key="answer"
-            )
-        return self.sessions[session_id]
-    
-    def query(self, question: str, session_id: str) -> Dict[str, any]:
-        """Query the RAG system"""
+    def load_knowledge(self):
+        """Load knowledge from JSON"""
         try:
-            if not self.vectorstore:
-                return {
-                    "answer": "System is initializing. Please try again in a moment.",
-                    "sources": []
-                }
-            
-            # Get memory
-            memory = self.get_or_create_memory(session_id)
-            
-            # Create retrieval chain
-            qa_chain = ConversationalRetrievalChain.from_llm(
-                llm=self.llm,
-                retriever=self.vectorstore.as_retriever(
-                    search_kwargs={"k": 3}
-                ),
-                memory=memory,
-                return_source_documents=True,
-                verbose=False
-            )
-            
-            # Get answer
-            result = qa_chain({"question": question})
-            
-            # Extract sources
-            sources = [
-                doc.page_content[:100] + "..."
-                for doc in result.get('source_documents', [])
-            ]
-            
-            return {
-                "answer": result['answer'],
-                "sources": sources
-            }
-        
+            if self.knowledge_file.exists():
+                with open(self.knowledge_file, 'r', encoding='utf-8') as f:
+                    return json.load(f)
         except Exception as e:
-            logger.error(f"RAG query error: {e}")
-            return {
-                "answer": "I apologize, but I encountered an error. Please try rephrasing your question.",
-                "sources": []
-            }
+            logger.error(f"Failed to load knowledge: {e}")
+        return []
     
-    def clear_session(self, session_id: str):
-        """Clear conversation memory for session"""
-        if session_id in self.sessions:
-            del self.sessions[session_id]
+    async def get_response(self, query: str) -> str:
+        """Get AI response using simple keyword matching + Groq"""
+        try:
+            # Simple keyword search
+            context = self.search_knowledge(query)
+            
+            # Use Groq API
+            response = await self.generate_with_groq(query, context)
+            return response
+            
+        except Exception as e:
+            logger.error(f"Error: {e}")
+            return self.fallback_response(query)
+    
+    def search_knowledge(self, query: str) -> str:
+        """Simple keyword-based search - no embeddings needed"""
+        query_lower = query.lower()
+        keywords = query_lower.split()
+        
+        scored = []
+        for entry in self.knowledge_base:
+            content = entry.get('content', '').lower()
+            score = sum(1 for kw in keywords if kw in content)
+            if score > 0:
+                scored.append((score, entry))
+        
+        scored.sort(reverse=True, key=lambda x: x[0])
+        top = [e for s, e in scored[:3]]
+        return "\n\n".join([e.get('content', '') for e in top])[:800]
+    
+    async def generate_with_groq(self, query: str, context: str) -> str:
+        """Call Groq API directly"""
+        from ..config import settings
+        
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.post(
+                    "https://api.groq.com/openai/v1/chat/completions",
+                    headers={
+                        "Authorization": f"Bearer {settings.groq_api_key}",
+                        "Content-Type": "application/json"
+                    },
+                    json={
+                        "model": "llama-3.1-8b-instant",
+                        "messages": [
+                            {"role": "system", "content": f"You are Prodesk AI assistant. Context: {context}"},
+                            {"role": "user", "content": query}
+                        ],
+                        "max_tokens": 200,
+                        "temperature": 0.7
+                    },
+                    timeout=10.0
+                )
+                
+                if response.status_code == 200:
+                    return response.json()['choices'][0]['message']['content']
+        except Exception as e:
+            logger.error(f"Groq API error: {e}")
+        
+        return self.fallback_response(query)
+    
+    def fallback_response(self, query: str) -> str:
+        """Fallback for common queries"""
+        q = query.lower()
+        
+        if any(w in q for w in ['service', 'offer']):
+            return "Prodesk provides IT staffing, software development, and engineering services."
+        if any(w in q for w in ['hello', 'hi']):
+            return "Hello! I'm Prodesk AI Assistant. How can I help you?"
+        if any(w in q for w in ['contact', 'email']):
+            return "You can contact Prodesk through our website. We respond within 24 hours."
+        
+        return "Thank you for your question! Could you provide more details?"
 
-# Global instance
 rag_service = RAGService()
