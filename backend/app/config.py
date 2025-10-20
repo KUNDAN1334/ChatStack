@@ -1,37 +1,33 @@
+"""Application configuration"""
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing import List
-import os
+from typing import List, Optional
 
 class Settings(BaseSettings):
-    """Application settings"""
+    """Application settings loaded from environment variables"""
     
-    # MongoDB
+    # Database (required)
     mongodb_url: str
     database_name: str = "prodesk_chatbot"
     
-    # Groq API
+    # AI API (optional with default)
     groq_api_key: str = ""
     
-    # Application
+    # Server (hardcoded - Railway handles port via start command)
     api_host: str = "0.0.0.0"
-    api_port: int = 8000  # Railway handles via $PORT in start command
+    api_port: int = 8000
     
-    # CORS - Allow all for now
-    cors_origins: List[str] = [
-        "http://localhost:5173",
-        "http://localhost:5174",
-        "http://localhost:3000",
-        "*"  # Allow all for testing
-    ]
+    # CORS
+    cors_origins: List[str] = ["*"]
     
-    # Vector Store
+    # Paths
     vectorstore_path: str = "./data/vectorstore"
     knowledge_file: str = "./data/prodesk_knowledge.json"
     
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding='utf-8',
-        extra='ignore'
+        extra='ignore',  # Ignore extra env vars like PORT
+        case_sensitive=False
     )
 
 settings = Settings()
