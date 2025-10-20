@@ -1,6 +1,7 @@
 """Application configuration"""
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import List, Optional
+import os
 
 class Settings(BaseSettings):
     """Application settings loaded from environment variables"""
@@ -14,7 +15,7 @@ class Settings(BaseSettings):
     
     # Server (hardcoded - Railway handles port via start command)
     api_host: str = "0.0.0.0"
-    api_port: int = 8000
+    api_port: int = int(os.environ.get("PORT", 8000))
     
     # CORS
     cors_origins: List[str] = ["*"]
