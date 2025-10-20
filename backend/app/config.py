@@ -1,32 +1,37 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import List
 import os
-from dotenv import load_dotenv
-
-load_dotenv()
 
 class Settings(BaseSettings):
+    """Application settings"""
+    
     # MongoDB
-    mongodb_url: str = os.getenv("MONGODB_URL")
-    database_name: str = os.getenv("DATABASE_NAME", "prodesk_chatbot")
+    mongodb_url: str
+    database_name: str = "prodesk_chatbot"
     
     # Groq API
-    groq_api_key: str = os.getenv("GROQ_API_KEY")
+    groq_api_key: str = ""
     
     # Application
-    api_host: str = os.getenv("API_HOST", "0.0.0.0")
-    api_port: int = int(os.getenv("API_PORT", 8000))
+    api_host: str = "0.0.0.0"
+    api_port: int = 8000  # Railway handles via $PORT in start command
+    
+    # CORS - Allow all for now
     cors_origins: List[str] = [
         "http://localhost:5173",
         "http://localhost:5174",
         "http://localhost:3000",
+        "*"  # Allow all for testing
     ]
     
     # Vector Store
-    vectorstore_path: str = os.getenv("VECTORSTORE_PATH", "./data/vectorstore")
-    knowledge_file: str = os.getenv("KNOWLEDGE_FILE", "./data/prodesk_knowledge.json")
+    vectorstore_path: str = "./data/vectorstore"
+    knowledge_file: str = "./data/prodesk_knowledge.json"
     
-    class Config:
-        env_file = ".env"
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding='utf-8',
+        extra='ignore'
+    )
 
 settings = Settings()
