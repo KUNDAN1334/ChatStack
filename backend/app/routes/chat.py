@@ -22,7 +22,8 @@ async def chat(request: ChatRequest):
         )
     
     # Query RAG system
-    result = rag_service.query(request.message, request.session_id)
+  result = await rag_service.get_response(request.message)
+
     
     # Save conversation
     user_message = Message(role=MessageRole.USER, content=request.message)
@@ -54,12 +55,12 @@ async def chat(request: ChatRequest):
         },
         upsert=True
     )
-    
-    return ChatResponse(
-        answer=result["answer"],
-        sources=result["sources"],
-        session_id=request.session_id
-    )
+   return ChatResponse(
+    answer=result,
+    sources=[],
+    session_id=request.session_id
+)
+
 
 @router.post("/leads", response_model=LeadResponse, status_code=status.HTTP_201_CREATED)
 async def capture_lead(lead_data: LeadCapture):
