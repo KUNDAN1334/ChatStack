@@ -22,12 +22,11 @@ async def chat(request: ChatRequest):
         )
     
     # Query RAG system
-  result = await rag_service.get_response(request.message)
-
+    result = await rag_service.get_response(request.message)
     
     # Save conversation
     user_message = Message(role=MessageRole.USER, content=request.message)
-    assistant_message = Message(role=MessageRole.ASSISTANT, content=result["answer"])
+    assistant_message = Message(role=MessageRole.ASSISTANT, content=result)
     
     await conversations_collection.update_one(
         {
@@ -55,12 +54,12 @@ async def chat(request: ChatRequest):
         },
         upsert=True
     )
-   return ChatResponse(
-    answer=result,
-    sources=[],
-    session_id=request.session_id
-)
-
+    
+    return ChatResponse(
+        answer=result,
+        sources=[],
+        session_id=request.session_id
+    )
 
 @router.post("/leads", response_model=LeadResponse, status_code=status.HTTP_201_CREATED)
 async def capture_lead(lead_data: LeadCapture):
