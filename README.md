@@ -11,6 +11,7 @@
 
 A full-stack **AI chatbot system** with an embeddable widget, interactive dashboard, and analytics backend — powered by **FastAPI**, **React**, and **MongoDB**.
 
+Dashboard--> https://chat-stack-55ye.vercel.app/
 ---
 
 ## 🧠 Table of Contents
